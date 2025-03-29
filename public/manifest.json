@@ -1,0 +1,20 @@
+{
+  "name": "Hoist",
+  "short_name": "Hoist",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#19202D",
+  "theme_color": "#19202D",
+  "icons": [
+    {
+      "src": "/hoistfavi.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/hoistfavi.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

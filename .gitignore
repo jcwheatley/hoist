@@ -7,10 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Build output
+dist/
+dist-ssr/
+
+# Local development config
 *.local
+
+# Node modules
+node_modules/
 
 # Editor directories and files
 .vscode/*
@@ -27,3 +32,4 @@ dist-ssr
 .env
 .env.local
 .env.* # Ignores all .env files except those explicitly tracked
+.vercel

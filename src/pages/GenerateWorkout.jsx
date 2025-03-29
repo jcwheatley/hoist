@@ -1,115 +1,141 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { generateWorkoutAI } from "../utils/openaiClient"; // Import OpenAI function
+import toast from "react-hot-toast";
+import Dropdown from "../components/Dropdown";
+import { useWorkout } from "@/hooks/useWorkout";
 
 export default function GenerateWorkout() {
+  const { updateWorkout, startWorkoutGuarded } = useWorkout();
   const navigate = useNavigate();
   const [goal, setGoal] = useState("");
   const [workoutType, setWorkoutType] = useState("");
   const [level, setLevel] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const goalOptions = [
+    { value: "strength", label: "Strength" },
+    { value: "endurance", label: "Endurance" },
+    { value: "hypertrophy", label: "Muscle Growth" },
+  ];
+  const typeOptions = [
+    { value: "full-body", label: "Full Body" },
+    { value: "upper-body", label: "Upper Body" },
+    { value: "lower-body", label: "Lower Body" },
+  ];
+  const levelOptions = [
+    { value: "beginner", label: "Beginner" },
+    { value: "intermediate", label: "Intermediate" },
+    { value: "advanced", label: "Advanced" },
+  ];
+
+  const handleStartWorkout = () => {
+    startWorkoutGuarded(undefined, undefined, handleGenerateWorkout);
+  };
+
   const handleGenerateWorkout = async () => {
     if (!goal || !workoutType || !level) {
-      alert("Please select all options before generating your workout.");
+      toast.error("Please select all options before generating your workout.");
       return;
     }
 
     setLoading(true);
 
     try {
-      // ✅ Call OpenAI to generate the workout
-      const generatedWorkout = await generateWorkoutAI(
-        goal,
-        workoutType,
-        level
-      );
+      console.log("about to make frontend call to generate workout");
 
-      if (!generatedWorkout) {
-        alert("Failed to generate workout. Please try again.");
-        setLoading(false);
+      const response = await fetch("/api/fetchAIWorkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ goal, workoutType, level }),
+      });
+
+      if (!response.ok) {
+        const { error, fallback } = await response.json();
+        toast.error(error || "Failed to generate workout. Using fallback.");
+        if (fallback) {
+          updateWorkout({
+            name: fallback.name,
+            exercises: fallback.exercises,
+          });
+          navigate("/workout", { state: { templateWorkout: fallback } });
+        }
         return;
       }
 
-      // ✅ Navigate to workout logging page with AI-generated data
-      navigate("/workouts", { state: { templateWorkout: generatedWorkout } });
+      const text = await response.text();
+      const generatedWorkout = text ? JSON.parse(text) : null;
+
+      if (!generatedWorkout || !generatedWorkout.exercises) {
+        toast.error("Failed to generate workout. Please try again.");
+        return;
+      }
+
+      updateWorkout({
+        name: generatedWorkout.name,
+        exercises: generatedWorkout.exercises,
+      });
+
+      navigate("/workout", { state: { templateWorkout: generatedWorkout } });
     } catch (error) {
       console.error("Error generating workout:", error);
-      alert("Error generating workout.");
+      toast.error("Unexpected error occurred.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className='min-h-screen bg-gray-100 pt-20 px-6 max-w-lg mx-auto'>
-      <h1 className='text-3xl font-bold text-center text-gray-900 mb-6'>
+    <div className='pt-20 px-6 max-w-lg mx-auto'>
+      <h1 className='text-3xl font-bold text-center text-white mb-6'>
         Generate AI Workout
       </h1>
 
-      {/* Goal Selection */}
-      <div className='mb-4'>
-        <label className='block text-gray-700 text-sm font-bold mb-2'>
-          Select Your Goal:
-        </label>
-        <select
-          value={goal}
-          onChange={(e) => setGoal(e.target.value)}
-          className='w-full px-3 py-2 border rounded-md'
-        >
-          <option value=''>Select Goal</option>
-          <option value='strength'>Strength</option>
-          <option value='endurance'>Endurance</option>
-          <option value='hypertrophy'>Muscle Growth</option>
-        </select>
+      <div className='space-y-4 pb-8'>
+        <Dropdown
+          label='Select Your Goal:'
+          options={goalOptions}
+          selected={goal}
+          setSelected={setGoal}
+        />
+
+        <Dropdown
+          label='Select Workout Type:'
+          options={typeOptions}
+          selected={workoutType}
+          setSelected={setWorkoutType}
+        />
+
+        <Dropdown
+          label='Select Fitness Level:'
+          options={levelOptions}
+          selected={level}
+          setSelected={setLevel}
+        />
       </div>
 
-      {/* Workout Type Selection */}
-      <div className='mb-4'>
-        <label className='block text-gray-700 text-sm font-bold mb-2'>
-          Select Workout Type:
-        </label>
-        <select
-          value={workoutType}
-          onChange={(e) => setWorkoutType(e.target.value)}
-          className='w-full px-3 py-2 border rounded-md'
-        >
-          <option value=''>Select Type</option>
-          <option value='full-body'>Full Body</option>
-          <option value='upper-body'>Upper Body</option>
-          <option value='lower-body'>Lower Body</option>
-        </select>
-      </div>
-
-      {/* Fitness Level Selection */}
-      <div className='mb-4'>
-        <label className='block text-gray-700 text-sm font-bold mb-2'>
-          Select Fitness Level:
-        </label>
-        <select
-          value={level}
-          onChange={(e) => setLevel(e.target.value)}
-          className='w-full px-3 py-2 border rounded-md'
-        >
-          <option value=''>Select Level</option>
-          <option value='beginner'>Beginner</option>
-          <option value='intermediate'>Intermediate</option>
-          <option value='advanced'>Advanced</option>
-        </select>
-      </div>
-
-      {/* Generate Workout Button */}
       <button
-        onClick={handleGenerateWorkout}
-        className={`mt-6 w-full bg-green-600 text-white py-3 rounded-lg font-semibold ${
+        onClick={handleStartWorkout}
+        disabled={loading}
+        className={`w-full bg-orange-500 text-white py-4 rounded-lg font-bold tracking-wide ${
           loading
             ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-green-700 transition-all"
+            : "hover:bg-orange-600 transition-all"
         }`}
-        disabled={loading}
       >
-        {loading ? "Generating..." : "Generate Workout"}
+        Generate Workout
       </button>
+
+      {loading && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70'>
+          <div className='text-center text-white'>
+            <div className='animate-spin rounded-full h-16 w-16 border-t-4 border-orange-500 border-opacity-50 mx-auto mb-6'></div>
+            <h2 className='text-xl font-bold'>Generating Your Workout...</h2>
+            <p className='text-sm text-gray-300 mt-2'>
+              Hang tight — we’re building a workout tailored just for you.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

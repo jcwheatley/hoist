@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { db } from "../utils/firebase";
+import { db } from "@/utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faRedo } from "@fortawesome/free-solid-svg-icons";
@@ -17,8 +17,7 @@ export default function ViewWorkout() {
       if (docSnap.exists()) {
         setWorkout(docSnap.data());
       } else {
-        console.log("Workout not found!");
-        navigate("/dashboard"); // Redirect if not found
+        navigate("/dashboard");
       }
     };
 
@@ -26,13 +25,13 @@ export default function ViewWorkout() {
   }, [id, navigate]);
 
   const startWorkoutWithTemplate = () => {
-    navigate("/workouts", { state: { templateWorkout: workout } });
+    navigate("/workout", { state: { templateWorkout: workout } });
   };
 
   if (!workout) return <p className='text-center mt-10'>Loading...</p>;
 
   return (
-    <div className='min-h-screen bg-gray-100 pt-20 px-6 max-w-lg mx-auto'>
+    <div className='pt-20 px-6 max-w-lg mx-auto'>
       <button
         onClick={() => navigate("/dashboard")}
         className='flex items-center text-blue-600 text-lg font-semibold mb-4'

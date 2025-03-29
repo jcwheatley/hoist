@@ -1,9 +1,11 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/*.js", "use": "@vercel/node" }
+    { "src": "api/*.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static-build" }
   ],
   "routes": [
-    { "src": "/api/generateWorkout", "dest": "api/generateWorkout.js" }
+    { "src": "/api/(.*)", "dest": "api/$1.js" },
+    { "src": "/(.*)", "dest": "/" }
   ]
 }

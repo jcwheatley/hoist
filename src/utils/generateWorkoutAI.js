@@ -2,10 +2,10 @@ export const generateWorkoutAI = async (goal, workoutType, level) => {
   console.log("Generating workout ai ");
 
   try {
-    const isLocal = import.meta.env.DEV;
-    const baseUrl = isLocal ? "http://localhost:3000" : "";
+    // const isLocal = import.meta.env.DEV;
+    // const baseUrl = isLocal ? "http://localhost:3000" : "";
 
-    const response = await fetch(`${baseUrl}/api/fetchAIWorkout`, {
+    const response = await fetch(`/api/fetchAIWorkout`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ goal, workoutType, level }),

@@ -224,7 +224,7 @@ export default function Workout() {
 
           <button
             onClick={completeWorkout}
-            className='bg-orange-500 text-white px-4 py-1 rounded-md font-semibold whitespace-nowrap'
+            className='cursor-pointer bg-orange-500 text-white px-4 py-1 rounded-md font-semibold whitespace-nowrap'
           >
             DONE
           </button>
@@ -255,7 +255,7 @@ export default function Workout() {
                     as='div'
                     className='relative inline-block text-left ml-2'
                   >
-                    <MenuButton className='text-gray-400 hover:text-white focus:outline-none'>
+                    <MenuButton className='cursor-pointer text-gray-400 hover:text-white focus:outline-none'>
                       <FontAwesomeIcon icon={faEllipsisV} />
                     </MenuButton>
 
@@ -269,7 +269,7 @@ export default function Workout() {
                               }}
                               className={`${
                                 active ? "bg-[#2C3A4D]" : ""
-                              } w-full text-left px-2 py-2 text-sm`}
+                              } cursor-pointer w-full text-left px-2 py-2 text-sm`}
                             >
                               Remove Last Set
                             </button>
@@ -282,7 +282,7 @@ export default function Workout() {
                               onClick={() => removeExercise(index)}
                               className={`${
                                 active ? "bg-[#2C3A4D]" : ""
-                              } w-full text-left px-2 py-2 text-sm text-red-400`}
+                              } cursor-pointer w-full text-left px-2 py-2 text-sm text-red-400`}
                             >
                               Delete Exercise
                             </button>
@@ -358,6 +358,7 @@ export default function Workout() {
                         </td>
                         <td className='py-2 text-center'>
                           <button
+                            className='cursor-pointer'
                             onClick={() => toggleSetCompletion(index, setIndex)}
                           >
                             <FontAwesomeIcon
@@ -378,13 +379,13 @@ export default function Workout() {
                 <div className='flex gap-2 mt-4'>
                   <button
                     onClick={() => addSet(index)}
-                    className='flex-1 bg-[#1F2A3A] text-white py-2 rounded-md font-semibold'
+                    className='cursor-pointer flex-1 bg-[#1F2A3A] text-white py-2 rounded-md font-semibold'
                   >
                     + Add Set
                   </button>
                   <button
                     onClick={() => markExerciseDoneStatus(index, true)}
-                    className='flex-1 border border-green-500 text-green-500 hover:bg-green-500 hover:text-white py-2 rounded-md font-semibold transition'
+                    className='cursor-pointer flex-1 border border-green-500 text-green-500 hover:bg-green-500 hover:text-white py-2 rounded-md font-semibold transition'
                   >
                     Done
                   </button>
@@ -398,7 +399,7 @@ export default function Workout() {
       {/* Add Exercise */}
       <button
         onClick={addExercise}
-        className='w-full bg-[#1F2A3A] text-white py-2 mt-4 rounded-md font-semibold'
+        className='cursor-pointer w-full bg-[#1F2A3A] text-white py-2 mt-4 rounded-md font-semibold'
       >
         + Add Exercise
       </button>

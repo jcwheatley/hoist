@@ -48,13 +48,13 @@ export default function Layout({ children }) {
             <div className='flex justify-end gap-3'>
               <button
                 onClick={cancelDiscard}
-                className='px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-sm'
+                className='cursor-pointer px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-sm'
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDiscard}
-                className='px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-sm font-semibold'
+                className='cursor-pointer px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-sm font-semibold'
               >
                 Discard & Continue
               </button>

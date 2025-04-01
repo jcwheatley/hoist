@@ -50,16 +50,16 @@ export default function Profile() {
 
         {/* Sections */}
         <div className='mt-8 space-y-4'>
-          <div className='bg-[#19202D] p-4 rounded-lg shadow'>
+          {/* <div className='bg-[#19202D] p-4 rounded-lg shadow'>
             <h3 className='font-semibold text-lg'>Edit Profile</h3>
             <p className='text-gray-400 text-sm'>Coming soon...</p>
-          </div>
+          </div> */}
 
           <div className='bg-[#19202D] p-4 rounded-lg shadow space-y-4'>
             <h3 className='font-semibold text-lg'>Settings</h3>
             <button
               onClick={handleResetPlan}
-              className='w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold transition'
+              className='cursor-pointer w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold transition'
             >
               Reset Workout Plan
             </button>
@@ -67,7 +67,7 @@ export default function Profile() {
 
           <button
             onClick={handleSignOut}
-            className='mt-8 w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition'
+            className='cursor-pointer mt-8 w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition'
           >
             Sign Out
           </button>

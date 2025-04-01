@@ -46,13 +46,13 @@ export default function StopwatchBar() {
             setStopwatchTime(0);
             setStopwatchRunning(false);
           }}
-          className='text-white hover:text-red-400'
+          className='cursor-pointer text-white hover:text-red-400'
         >
           <FontAwesomeIcon icon={faRedo} className='text-2xl' />
         </button>
         <button
           onClick={() => setStopwatchRunning((prev) => !prev)}
-          className='text-white hover:text-green-400'
+          className='cursor-pointer text-white hover:text-green-400'
         >
           <FontAwesomeIcon
             icon={stopwatchRunning ? faPause : faPlay}

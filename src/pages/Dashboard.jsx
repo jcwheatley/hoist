@@ -129,7 +129,7 @@ export default function Dashboard() {
       ) : !plan ? (
         <button
           onClick={() => navigate("/plan")}
-          className='w-11/12 max-w-lg bg-orange-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-orange-600 transition-all'
+          className='cursor-pointer w-11/12 max-w-lg bg-orange-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-orange-600 transition-all'
         >
           SET UP WORKOUT PLAN
           <p className='text-sm font-normal'>BUILD A PLAN THAT FITS YOU</p>
@@ -137,7 +137,7 @@ export default function Dashboard() {
       ) : hasNextWorkout && todayWorkout ? (
         <button
           onClick={handleStartTodaysWorkout}
-          className='w-11/12 max-w-lg bg-orange-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-orange-600 transition-all'
+          className='cursor-pointer w-11/12 max-w-lg bg-orange-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-orange-600 transition-all'
         >
           START TODAY’S WORKOUT
           <p className='text-sm font-normal'>
@@ -157,7 +157,7 @@ export default function Dashboard() {
       {/* Manual Workout */}
       <button
         onClick={handleStartManualWorkout}
-        className='w-11/12 max-w-lg mt-4 bg-[#19202D] text-white py-4 px-6 rounded-lg text-lg font-semibold text-center hover:bg-[#212b3b] transition-all'
+        className='cursor-pointer w-11/12 max-w-lg mt-4 bg-[#19202D] text-white py-4 px-6 rounded-lg text-lg font-semibold text-center hover:bg-gray-700 transition-all'
       >
         NEW WORKOUT
         <p className='text-sm font-light'>LOG A WORKOUT AS YOU GO</p>
@@ -167,7 +167,7 @@ export default function Dashboard() {
       <div className='w-11/12 max-w-lg mt-4 grid grid-cols-2 gap-4'>
         <Link
           to='/workout/ai'
-          className='bg-[#19202D] text-white py-4 px-2 rounded-lg text-center hover:bg-[#212b3b] transition-all flex flex-col items-center justify-center'
+          className='bg-[#19202D] text-white py-4 px-2 rounded-lg text-center hover:bg-gray-700 transition-all flex flex-col items-center justify-center'
         >
           <FontAwesomeIcon icon={faRobot} className='text-lg mb-1' />
           <span className='text-sm font-semibold'>AI GENERATED</span>
@@ -175,7 +175,7 @@ export default function Dashboard() {
 
         <Link
           to='/library'
-          className='bg-[#19202D] text-white py-4 px-2 rounded-lg text-center hover:bg-[#212b3b] transition-all flex flex-col items-center justify-center'
+          className='bg-[#19202D] text-white py-4 px-2 rounded-lg text-center hover:bg-gray-700 transition-all flex flex-col items-center justify-center'
         >
           <FontAwesomeIcon icon={faBook} className='text-lg mb-1' />
           <span className='text-sm font-semibold'>LIBRARY</span>

@@ -32,7 +32,7 @@ export default function PlanNotes() {
 
       <button
         onClick={handleNext}
-        className='w-full py-4 bg-orange-500 hover:bg-orange-600 rounded-lg font-bold transition'
+        className='cursor-pointer w-full py-4 bg-orange-500 hover:bg-orange-600 rounded-lg font-bold transition'
       >
         Review Plan
       </button>

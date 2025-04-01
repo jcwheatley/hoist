@@ -26,7 +26,7 @@ export default function WorkoutPlanIntro() {
 
       <button
         onClick={handleStart}
-        className='w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-lg font-semibold transition'
+        className='cursor-pointer w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-lg font-semibold transition'
       >
         Get Started
       </button>

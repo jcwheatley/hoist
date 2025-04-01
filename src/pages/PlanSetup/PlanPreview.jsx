@@ -97,7 +97,7 @@ export default function PlanPreview() {
       <button
         onClick={handleStartPlan}
         disabled={loading}
-        className={`w-full py-4 rounded-lg font-bold transition ${
+        className={`cursor-pointer w-full py-4 rounded-lg font-bold transition ${
           loading
             ? "bg-gray-700 cursor-not-allowed"
             : "bg-orange-500 hover:bg-orange-600"
@@ -131,7 +131,10 @@ function PreviewItem({ label, value, onEdit }) {
         <p className='text-sm text-gray-400'>{label}</p>
         <p className='text-lg font-medium'>{value}</p>
       </div>
-      <button onClick={onEdit} className='text-gray-300 hover:text-white'>
+      <button
+        onClick={onEdit}
+        className='cursor-pointer text-gray-300 hover:text-white'
+      >
         <FontAwesomeIcon icon={faPen} />
       </button>
     </div>

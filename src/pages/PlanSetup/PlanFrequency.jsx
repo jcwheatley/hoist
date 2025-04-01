@@ -30,7 +30,7 @@ export default function PlanFrequency() {
         {options.map((days) => (
           <button
             key={days}
-            className={`px-4 py-2 rounded-full w-full max-w-xs ${
+            className={`cursor-pointer px-4 py-2 rounded-full w-full max-w-xs ${
               selected === days
                 ? "bg-orange-500 text-white"
                 : "bg-gray-800 text-white"
@@ -50,7 +50,7 @@ export default function PlanFrequency() {
         <button
           onClick={handleNext}
           disabled={!selected}
-          className={`w-full py-4 rounded-lg font-bold tracking-wide ${
+          className={`cursor-pointer w-full py-4 rounded-lg font-bold tracking-wide ${
             selected
               ? "bg-orange-500 hover:bg-orange-600 text-white transition"
               : "bg-gray-700 text-gray-400 cursor-not-allowed"

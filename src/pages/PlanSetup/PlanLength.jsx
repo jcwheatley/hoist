@@ -33,7 +33,7 @@ export default function PlanLength() {
           step='1'
           value={weeks}
           onChange={(e) => setWeeks(parseInt(e.target.value))}
-          className='w-full'
+          className='cursor-pointer w-full'
         />
         <div className='text-orange-500 text-lg font-semibold'>
           {weeks} Weeks
@@ -47,7 +47,7 @@ export default function PlanLength() {
 
       <button
         onClick={handleNext}
-        className='w-full py-4 bg-orange-500 hover:bg-orange-600 rounded-lg font-bold transition'
+        className='cursor-pointer w-full py-4 bg-orange-500 hover:bg-orange-600 rounded-lg font-bold transition'
       >
         Next
       </button>

@@ -36,7 +36,7 @@ export default function PlanGoal() {
             key={goal}
             type='button'
             onClick={() => setSelectedGoal(goal)}
-            className={`w-full px-4 py-3 rounded-lg text-left transition ${
+            className={`cursor-pointer w-full px-4 py-3 rounded-lg text-left transition ${
               selectedGoal === goal
                 ? "bg-orange-500 text-white"
                 : "bg-gray-800 text-white"
@@ -50,7 +50,7 @@ export default function PlanGoal() {
       <button
         onClick={handleNext}
         disabled={!selectedGoal}
-        className={`w-full py-4 rounded-lg font-bold transition ${
+        className={`cursor-pointer w-full py-4 rounded-lg font-bold transition ${
           !selectedGoal
             ? "bg-gray-600 cursor-not-allowed"
             : "bg-orange-500 hover:bg-orange-600"

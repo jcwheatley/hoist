@@ -49,7 +49,7 @@ export default function PlanEquipment() {
             key={item}
             type='button'
             onClick={() => toggleEquipment(item)}
-            className={`w-full px-4 py-3 rounded-lg text-left transition ${
+            className={`cursor-pointer w-full px-4 py-3 rounded-lg text-left transition ${
               selectedEquipment.includes(item)
                 ? "bg-orange-500 text-white"
                 : "bg-gray-800 text-white"
@@ -63,7 +63,7 @@ export default function PlanEquipment() {
       <button
         onClick={handleNext}
         disabled={selectedEquipment.length === 0}
-        className={`w-full py-4 rounded-lg font-bold transition ${
+        className={`cursor-pointer w-full py-4 rounded-lg font-bold transition ${
           selectedEquipment.length === 0
             ? "bg-gray-600 cursor-not-allowed"
             : "bg-orange-500 hover:bg-orange-600"

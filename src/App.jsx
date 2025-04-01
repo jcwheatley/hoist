@@ -69,7 +69,12 @@ export default function App() {
                 {icon}
                 {message}
                 {t.type !== "loading" && (
-                  <button onClick={() => toast.dismiss(t.id)}>X</button>
+                  <button
+                    className='cursor-pointer'
+                    onClick={() => toast.dismiss(t.id)}
+                  >
+                    X
+                  </button>
                 )}
               </>
             )}

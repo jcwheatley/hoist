@@ -13,7 +13,7 @@ export default function CancelPlanButton() {
   return (
     <button
       onClick={handleCancel}
-      className='absolute top-4 right-6 text-gray-300 text-xl hover:text-white transition'
+      className='cursor-pointer absolute top-4 right-6 text-gray-300 text-xl hover:text-white transition'
       aria-label='Cancel workout plan setup'
     >
       ✕

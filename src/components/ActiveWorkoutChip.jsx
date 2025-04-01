@@ -29,12 +29,15 @@ export default function ActiveWorkoutChip() {
           </p>
         </div>
         <div className='flex gap-4'>
-          <button onClick={stopWorkout} className='text-sm text-gray-300'>
+          <button
+            onClick={stopWorkout}
+            className='cursor-pointer text-sm text-gray-300'
+          >
             Stop
           </button>
           <button
             onClick={() => navigate("/workout")}
-            className='text-sm text-blue-400'
+            className='cursor-pointer text-sm text-blue-400'
           >
             View
           </button>

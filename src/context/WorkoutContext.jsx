@@ -3,6 +3,9 @@ import { createContext, useContext, useState, useEffect } from "react";
 const WorkoutContext = createContext(null);
 
 export const WorkoutProvider = ({ children }) => {
+  const [stopwatchTime, setStopwatchTime] = useState(0);
+  const [stopwatchRunning, setStopwatchRunning] = useState(false);
+
   const [activeWorkout, setActiveWorkout] = useState(() => {
     const stored = localStorage.getItem("activeWorkout");
     return stored ? JSON.parse(stored) : null;
@@ -23,6 +26,8 @@ export const WorkoutProvider = ({ children }) => {
 
   const stopWorkout = () => {
     setActiveWorkout(null);
+    setStopwatchTime(0);
+    setStopwatchRunning(false);
     localStorage.removeItem("activeWorkout");
   };
 
@@ -33,7 +38,6 @@ export const WorkoutProvider = ({ children }) => {
 
   const startWorkoutGuarded = (name, exercises, onConfirmed) => {
     const hasMeaningfulWorkout = isWorkoutMeaningful(activeWorkout);
-    const newWorkout = { name, exercises };
 
     if (hasMeaningfulWorkout) {
       setAfterDiscardAction(() => () => {
@@ -71,6 +75,10 @@ export const WorkoutProvider = ({ children }) => {
         showDiscardModal,
         confirmDiscard,
         cancelDiscard,
+        stopwatchTime,
+        setStopwatchTime,
+        stopwatchRunning,
+        setStopwatchRunning,
       }}
     >
       {children}

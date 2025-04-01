@@ -34,7 +34,7 @@ export default function StopwatchBar() {
   };
 
   return (
-    <div className='fixed bottom-16 left-0 w-full bg-[#0A0E15] text-white flex justify-between items-center px-6 py-4 z-40 shadow-md'>
+    <div className='fixed bottom-20 left-0 w-full bg-[#0A0E15] text-white flex justify-between items-center px-6 py-4 z-40 shadow-md'>
       <div className='text-2xl font-mono flex items-center gap-2'>
         <FontAwesomeIcon icon={faStopwatch} className='text-orange-400' />
         {formatTime(stopwatchTime)}

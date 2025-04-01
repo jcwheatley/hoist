@@ -11,7 +11,7 @@ export default function Footer() {
   const location = useLocation();
 
   return (
-    <footer className='bg-[#0A0E15] text-white fixed bottom-0 w-full p-3 shadow-md'>
+    <footer className='bg-[#0A0E15] text-white fixed bottom-0 w-full p-3 shadow-md pb-6'>
       <div className='flex justify-around'>
         <NavItem
           to='/dashboard'

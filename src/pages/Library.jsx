@@ -41,13 +41,13 @@ export default function Library() {
       {workouts.length === 0 ? (
         <p className='text-gray-400 text-center'>No workouts found.</p>
       ) : (
-        <div className='space-y-4'>
+        <div className='space-y-4 pb-32'>
           {[...workouts]
             .sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds)
             .map((workout) => (
               <div
                 key={workout.id}
-                className='bg-[#19202D] p-4 rounded-lg shadow-md flex justify-between items-center hover:bg-gray-700 transition cursor-pointer'
+                className='bg-[#19202D] p-4 mb-2 rounded-lg shadow-md flex justify-between items-center hover:bg-gray-700 transition cursor-pointer'
                 onClick={() => handleStartWorkout(workout)}
               >
                 <div className='w-full max-w-full'>

@@ -19,7 +19,7 @@ export default function ActiveWorkoutChip() {
     currentSetIndex === -1 ? currentExercise?.sets.length : currentSetIndex + 1;
 
   return (
-    <div className='fixed bottom-20 w-full px-4 z-40'>
+    <div className='fixed bottom-22 w-full px-4 z-40'>
       <div className='bg-[#1F2A3A] text-white rounded-md px-4 py-3 flex justify-between items-center max-w-md mx-auto'>
         <div>
           <p className='font-bold text-sm'>ACTIVE WORKOUT</p>

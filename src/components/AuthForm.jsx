@@ -4,6 +4,7 @@ import {
   signInWithEmail,
   signUpWithEmail,
 } from "@/utils/firebase";
+import toast from "react-hot-toast";
 
 export default function AuthForm() {
   const [email, setEmail] = useState("");
@@ -12,10 +13,42 @@ export default function AuthForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isSignUp) {
-      await signUpWithEmail(email, password);
-    } else {
-      await signInWithEmail(email, password);
+    try {
+      if (isSignUp) {
+        await signUpWithEmail(email, password);
+      } else {
+        await signInWithEmail(email, password);
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      if (error.code === "auth/email-already-in-use") {
+        // Handle specific case for email already in use during sign up
+        toast.error("Email already in use. Please try logging in.");
+        return;
+      } else if (error.code === "auth/invalid-credential") {
+        // Handle case for user not found during login
+        toast.error("No account found with this email. Please sign up.");
+        return;
+      } else if (error.code === "auth/weak-password") {
+        // Handle wrong password case
+        toast.error(
+          "Weak password. Passwords should be at least 6 characters long."
+        );
+        return;
+      } else if (error.code === "auth/invalid-email") {
+        // Handle invalid email case
+        toast.error("Invalid email address. Please check and try again.");
+        return;
+      } else if (error.code === "auth/operation-not-allowed") {
+        // Handle case where sign-in method is not allowed
+        toast.error(
+          "This sign-in method is not allowed. Please contact support."
+        );
+        return;
+      } else {
+        // For any other errors, show a generic error message
+        toast.error(error.message || "Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -28,12 +61,15 @@ export default function AuthForm() {
         <label className='text-gray-300 text-left text-sm font-semibold mb-1 text-white'>
           Email
         </label>
+        <label className='text-gray-400 text-left text-sm font-semibold mb-1 text-white'>
+          (If you are just browsing, click sign up and use a fake email)
+        </label>
         <input
           type='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className='w-full px-3 py-2 rounded-md bg-[#2C3A4D] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500'
-          placeholder='you@email.com'
+          placeholder='example@email.com'
           required
         />
 
@@ -45,7 +81,7 @@ export default function AuthForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className='w-full px-3 py-2 rounded-md bg-[#2C3A4D] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500'
-          placeholder=''
+          placeholder='...'
           required
         />
 

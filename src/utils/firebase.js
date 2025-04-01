@@ -24,27 +24,12 @@ export const googleProvider = new GoogleAuthProvider();
 const db = getFirestore(app);
 export { db, collection, addDoc, getDocs };
 
-export const signInWithGoogle = async () => {
-  try {
-    await signInWithPopup(auth, googleProvider);
-  } catch (error) {
-    console.error("Google Sign-In Error:", error);
-  }
-};
-
-export const logOut = async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.error("Logout Error:", error);
-  }
-};
-
 export const signUpWithEmail = async (email, password) => {
   try {
     await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
     console.error("Signup Error:", error.message);
+    throw error; // throw so the caller can catch it and display toast
   }
 };
 
@@ -53,5 +38,24 @@ export const signInWithEmail = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     console.error("Login Error:", error.message);
+    throw error;
+  }
+};
+
+export const signInWithGoogle = async () => {
+  try {
+    await signInWithPopup(auth, googleProvider);
+  } catch (error) {
+    console.error("Google Sign-In Error:", error.message);
+    throw error;
+  }
+};
+
+export const logOut = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Logout Error:", error.message);
+    throw error;
   }
 };

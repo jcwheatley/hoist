@@ -1,73 +1,24 @@
-import { useState, useEffect } from "react";
-import { WorkoutContext } from "./WorkoutContextValue";
+import { createContext, useContext, useState, useEffect } from "react";
 
-export function WorkoutProvider({ children }) {
-  const [activeWorkout, setActiveWorkout] = useState(null);
+const WorkoutContext = createContext(null);
+
+export const WorkoutProvider = ({ children }) => {
+  const [activeWorkout, setActiveWorkout] = useState(() => {
+    const stored = localStorage.getItem("activeWorkout");
+    return stored ? JSON.parse(stored) : null;
+  });
+
   const [showDiscardModal, setShowDiscardModal] = useState(false);
   const [afterDiscardAction, setAfterDiscardAction] = useState(null);
 
-  // Load active workout from localStorage on mount
-  useEffect(() => {
-    const storedWorkout = localStorage.getItem("activeWorkout");
-    if (storedWorkout) {
-      setActiveWorkout(JSON.parse(storedWorkout));
-    }
-  }, []);
-
-  // Guarded start checks if workout already active
-  const startWorkoutGuarded = (name, exercises, callback) => {
-    if (activeWorkout) {
-      setAfterDiscardAction(() => () => {
-        if (name && exercises) {
-          startWorkout(name, exercises);
-        }
-        callback?.();
-      });
-      setShowDiscardModal(true);
-    } else {
-      if (!name || !exercises || exercises.length === 0) {
-        console.error("Invalid workout data provided");
-        return;
-      }
-
-      if (name && exercises) {
-        startWorkout(name, exercises);
-      }
-      callback?.();
-    }
+  const updateWorkout = (workout) => {
+    setActiveWorkout(workout);
+    localStorage.setItem("activeWorkout", JSON.stringify(workout));
   };
 
   const startWorkout = (name, exercises) => {
-    const workoutData = {
-      name,
-      exercises,
-      startTime: Date.now(),
-    };
-    setActiveWorkout({
-      ...workoutData,
-    });
-    localStorage.setItem("activeWorkout", JSON.stringify(workoutData));
-  };
-
-  const updateWorkout = (updates) => {
-    setActiveWorkout((prev) => {
-      const updated = { ...prev, ...updates };
-      localStorage.setItem("activeWorkout", JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  // When user confirms discard, stop the workout
-  const confirmDiscardWorkout = () => {
-    stopWorkout();
-    if (afterDiscardAction) afterDiscardAction();
-    setAfterDiscardAction(null);
-    setShowDiscardModal(false);
-  };
-
-  const cancelDiscardWorkout = () => {
-    setAfterDiscardAction(null);
-    setShowDiscardModal(false);
+    const newWorkout = { name, exercises };
+    updateWorkout(newWorkout);
   };
 
   const stopWorkout = () => {
@@ -75,17 +26,37 @@ export function WorkoutProvider({ children }) {
     localStorage.removeItem("activeWorkout");
   };
 
-  const hasMeaningfulWorkoutData = (workout) => {
-    if (!workout) return false;
-    if (workout.name?.trim()) return true;
+  const isWorkoutMeaningful = (workout) => {
+    if (!workout?.name?.trim()) return false;
+    return workout.exercises?.some((ex) => ex.name?.trim()) ?? false;
+  };
 
-    return workout.exercises?.some((exercise) => {
-      const hasName = exercise.name?.trim();
-      const hasSetData = exercise.sets?.some(
-        (set) => Number(set.value) > 0 || Number(set.weight) > 0
-      );
-      return hasName || hasSetData;
-    });
+  const startWorkoutGuarded = (name, exercises, onConfirmed) => {
+    const hasMeaningfulWorkout = isWorkoutMeaningful(activeWorkout);
+    const newWorkout = { name, exercises };
+
+    if (hasMeaningfulWorkout) {
+      setAfterDiscardAction(() => () => {
+        startWorkout(name, exercises);
+        onConfirmed?.();
+      });
+      setShowDiscardModal(true);
+    } else {
+      startWorkout(name, exercises);
+      onConfirmed?.();
+    }
+  };
+
+  const confirmDiscard = () => {
+    stopWorkout();
+    setShowDiscardModal(false);
+    afterDiscardAction?.();
+    setAfterDiscardAction(null);
+  };
+
+  const cancelDiscard = () => {
+    setShowDiscardModal(false);
+    setAfterDiscardAction(null);
   };
 
   return (
@@ -93,15 +64,18 @@ export function WorkoutProvider({ children }) {
       value={{
         activeWorkout,
         startWorkout,
-        updateWorkout,
         stopWorkout,
+        updateWorkout,
+        isWorkoutMeaningful,
         startWorkoutGuarded,
-        confirmDiscardWorkout,
-        cancelDiscardWorkout,
         showDiscardModal,
+        confirmDiscard,
+        cancelDiscard,
       }}
     >
       {children}
     </WorkoutContext.Provider>
   );
-}
+};
+
+export const useWorkout = () => useContext(WorkoutContext);

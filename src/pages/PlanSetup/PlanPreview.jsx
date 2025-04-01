@@ -43,9 +43,6 @@ export default function PlanPreview() {
         currentIndex: 0,
       };
 
-      // ✅ result.plan is your week's workouts
-      console.log("Generated Week 1:", fullPlan);
-
       await saveWorkoutPlan(result.plan);
 
       // Update context and localStorage
@@ -108,6 +105,21 @@ export default function PlanPreview() {
       >
         {loading ? "Generating..." : "Generate My Plan"}
       </button>
+      {loading && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70'>
+          <div className='text-center text-white'>
+            <img
+              src='/assets/robot-dance.gif'
+              alt='Robot Loading'
+              className='h-28 w-28 mx-auto mb-6'
+            />
+            <h2 className='text-xl font-bold'>Generating Your Plan...</h2>
+            <p className='text-sm text-gray-300 mt-2'>
+              Hang tight — your AI assistant is crafting the perfect plan.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

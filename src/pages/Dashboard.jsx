@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { db } from "@/utils/firebase";
 import { query, where, collection, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { useWorkout } from "@/hooks/useWorkout";
+import { useWorkout } from "@/context/WorkoutContext";
 import { usePlan } from "@/context/PlanContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -69,31 +69,28 @@ export default function Dashboard() {
     return total + workoutVolume;
   }, 0);
 
-  const handleStartManualWorkout = () => {
-    navigate("/workout"); // blank state
-  };
-
   const handleStartTodaysWorkout = () => {
-    if (todayWorkout) {
-      navigate("/workout", {
-        state: { templateWorkout: todayWorkout },
-      });
-    }
+    if (!todayWorkout) return;
+
+    startWorkoutGuarded(todayWorkout.name, todayWorkout.exercises, () =>
+      navigate("/workout")
+    );
   };
 
-  // const handleStartWorkout = () => {
-  //   startWorkoutGuarded(undefined, undefined, () => navigate("/workout"));
-  // };
-
-  // const handleStartTodaysWorkout = () => {
-  //   console.log("todayWorkout", todayWorkout);
-  //   if (todayWorkout) {
-  //     // const startWorkoutGuarded = (name, exercises, callback) => {
-  //     startWorkoutGuarded(todayWorkout.name, todayWorkout.exercises, () =>
-  //       navigate("/workout")
-  //     );
-  //   }
-  // };
+  const handleStartManualWorkout = () => {
+    startWorkoutGuarded(
+      "Untitled Workout",
+      [
+        {
+          name: "",
+          sets: [{ type: "reps", value: "", weight: "", completed: false }],
+          done: false,
+          expanded: true,
+        },
+      ],
+      () => navigate("/workout")
+    );
+  };
 
   return (
     <div className='flex flex-col items-center'>

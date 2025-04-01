@@ -1,26 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { useWorkout } from "@/hooks/useWorkout";
+import { useWorkout } from "@/context/WorkoutContext";
 
 export default function ActiveWorkoutChip() {
   const { activeWorkout, stopWorkout } = useWorkout();
   const navigate = useNavigate();
 
   if (!activeWorkout) return null;
-
-  // const hasMeaningfulWorkoutData = (workout) => {
-  //   if (!workout) return false;
-  //   if (workout.name?.trim()) return true;
-
-  //   return workout.exercises?.some((exercise) => {
-  //     const hasName = exercise.name?.trim();
-  //     const hasSetData = exercise.sets?.some(
-  //       (set) => Number(set.value) > 0 || Number(set.weight) > 0
-  //     );
-  //     return hasName || hasSetData;
-  //   });
-  // };
-
-  // if (!hasMeaningfulWorkoutData(activeWorkout)) return null;
 
   const currentExercise =
     activeWorkout.exercises?.find((ex) => !ex.done) ??

@@ -1,7 +1,7 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/utils/firebase";
 import { signOut } from "firebase/auth";
-import { useWorkout } from "@/hooks/useWorkout";
+import { useWorkout } from "@/context/WorkoutContext";
 import { usePlan } from "@/context/PlanContext";
 import toast from "react-hot-toast";
 
@@ -50,12 +50,12 @@ export default function Profile() {
 
         {/* Sections */}
         <div className='mt-8 space-y-4'>
-          <div className='bg-[#1a1f29] p-4 rounded-lg shadow'>
+          <div className='bg-[#19202D] p-4 rounded-lg shadow'>
             <h3 className='font-semibold text-lg'>Edit Profile</h3>
             <p className='text-gray-400 text-sm'>Coming soon...</p>
           </div>
 
-          <div className='bg-[#1a1f29] p-4 rounded-lg shadow space-y-4'>
+          <div className='bg-[#19202D] p-4 rounded-lg shadow space-y-4'>
             <h3 className='font-semibold text-lg'>Settings</h3>
             <button
               onClick={handleResetPlan}

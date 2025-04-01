@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Dropdown from "../components/Dropdown";
-import { useWorkout } from "@/hooks/useWorkout";
+import { useWorkout } from "@/context/WorkoutContext";
 
 export default function GenerateWorkout() {
   const { updateWorkout, startWorkoutGuarded } = useWorkout();
@@ -111,7 +111,11 @@ export default function GenerateWorkout() {
       {loading && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70'>
           <div className='text-center text-white'>
-            <div className='animate-spin rounded-full h-16 w-16 border-t-4 border-orange-500 border-opacity-50 mx-auto mb-6'></div>
+            <img
+              src='/assets/robot-dance.gif'
+              alt='Robot Loading'
+              className='h-28 w-28 mx-auto mb-6'
+            />
             <h2 className='text-xl font-bold'>Generating Your Workout...</h2>
             <p className='text-sm text-gray-300 mt-2'>
               Hang tight — we’re building your perfect workout.

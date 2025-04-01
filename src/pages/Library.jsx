@@ -3,7 +3,7 @@ import { query, where, collection, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "@/utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { useWorkout } from "@/hooks/useWorkout";
+import { useWorkout } from "@/context/WorkoutContext";
 
 export default function Library() {
   const [workouts, setWorkouts] = useState([]);
@@ -47,7 +47,7 @@ export default function Library() {
             .map((workout) => (
               <div
                 key={workout.id}
-                className='bg-gray-800 p-4 rounded-lg shadow-md flex justify-between items-center hover:bg-gray-700 transition cursor-pointer'
+                className='bg-[#19202D] p-4 rounded-lg shadow-md flex justify-between items-center hover:bg-gray-700 transition cursor-pointer'
                 onClick={() => handleStartWorkout(workout)}
               >
                 <div className='w-full max-w-full'>

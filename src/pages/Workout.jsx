@@ -13,7 +13,7 @@ import { getAuth } from "firebase/auth";
 import StopwatchBar from "@/components/StopwatchBar";
 import toast from "react-hot-toast";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useWorkout } from "@/hooks/useWorkout";
+import { useWorkout } from "@/context/WorkoutContext";
 import { usePlan } from "@/context/PlanContext";
 
 export default function Workout() {
@@ -56,17 +56,15 @@ export default function Workout() {
   }, []);
 
   useEffect(() => {
-    const hasValidExercises = exercises.some((ex) => ex.name.trim() !== "");
-    if (workoutName.trim() && hasValidExercises) {
-      startWorkout(workoutName, exercises);
-    }
-    console.log("Workout updated:", workoutName, exercises);
+    updateWorkout({ name: workoutName, exercises });
   }, [workoutName, exercises]);
 
+  // clear navigation state
   useEffect(() => {
     window.history.replaceState({}, document.title);
   }, []);
 
+  //Helps formatting with multiline workout name
   useEffect(() => {
     if (headerRef.current) {
       const height = headerRef.current.offsetHeight;

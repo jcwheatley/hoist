@@ -57,8 +57,6 @@ Each workout must follow this JSON format:
     if (!Array.isArray(parsed.plan)) {
       throw new Error("Invalid plan format");
     }
-
-    console.log("OpenAI raw response:", rawText);
     return res.status(200).json(parsed); // { plan: [...] }
   } catch (error) {
     console.error("Error generating week plan:", error);

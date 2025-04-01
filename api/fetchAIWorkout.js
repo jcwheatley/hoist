@@ -55,10 +55,7 @@ export default async function handler(req, res) {
     - Goal: ${goal}
     - Workout Type: ${workoutType}
     - Fitness Level: ${level}
-    - Provide 4-6 exercises
-    - Each exercise should have 3-4 sets
-    - Specify reps, and weight if applicable (no time-based units like seconds and no labels like lbs, seconds, bodyweight, pounds, etc.)
-    - Ensure the response is valid JSON
+    
     Format the response exactly like this:
     {
       "name": "<Workout Name>",
@@ -71,6 +68,12 @@ export default async function handler(req, res) {
         }
       ]
     }
+
+    - Provide 4-6 exercises
+    - Each exercise should have 3–4 sets.
+    - Do NOT use time-based units.
+    - Do NOT include units like "lbs", "bodyweight", etc.
+    - Return only valid JSON
   `;
 
   try {
@@ -87,8 +90,6 @@ export default async function handler(req, res) {
     if (!parsedWorkout?.exercises?.length) {
       throw new Error("Invalid workout format");
     }
-    console.log("OpenAI raw response:", rawText);
-
     return res.status(200).json(parsedWorkout);
   } catch (error) {
     console.error("Workout generation error:", error);

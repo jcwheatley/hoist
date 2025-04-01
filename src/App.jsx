@@ -58,7 +58,7 @@ export default function App() {
     <>
       {/* <Toaster  /> */}
       <Toaster
-        position='top-center w-full'
+        position='top-center'
         reverseOrder={false}
         toastOptions={{ duration: 3000 }}
       >
@@ -76,7 +76,6 @@ export default function App() {
           </ToastBar>
         )}
       </Toaster>
-      ;
       <Router>
         <Routes>
           {/* Public Routes */}

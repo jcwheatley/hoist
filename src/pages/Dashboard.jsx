@@ -79,7 +79,7 @@ export default function Dashboard() {
 
   const handleStartManualWorkout = () => {
     startWorkoutGuarded(
-      "Untitled Workout",
+      "",
       [
         {
           name: "",

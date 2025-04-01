@@ -7,12 +7,12 @@
   "theme_color": "#19202D",
   "icons": [
     {
-      "src": "/hoistfavi.png",
-      "sizes": "192x192",
+      "src": "/favicon_hoist.png",
+      "sizes": "180x180",
       "type": "image/png"
     },
     {
-      "src": "/hoistfavi.png",
+      "src": "/favicon_hoist.png",
       "sizes": "512x512",
       "type": "image/png"
     }

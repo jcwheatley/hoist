@@ -25,6 +25,11 @@ export function WorkoutProvider({ children }) {
       });
       setShowDiscardModal(true);
     } else {
+      if (!name || !exercises || exercises.length === 0) {
+        console.error("Invalid workout data provided");
+        return;
+      }
+
       if (name && exercises) {
         startWorkout(name, exercises);
       }
@@ -68,6 +73,19 @@ export function WorkoutProvider({ children }) {
   const stopWorkout = () => {
     setActiveWorkout(null);
     localStorage.removeItem("activeWorkout");
+  };
+
+  const hasMeaningfulWorkoutData = (workout) => {
+    if (!workout) return false;
+    if (workout.name?.trim()) return true;
+
+    return workout.exercises?.some((exercise) => {
+      const hasName = exercise.name?.trim();
+      const hasSetData = exercise.sets?.some(
+        (set) => Number(set.value) > 0 || Number(set.weight) > 0
+      );
+      return hasName || hasSetData;
+    });
   };
 
   return (

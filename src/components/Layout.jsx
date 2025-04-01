@@ -8,9 +8,19 @@ export default function Layout({ children }) {
   const { showDiscardModal, confirmDiscardWorkout, cancelDiscardWorkout } =
     useWorkout();
 
-  const hideLogoRoutes = ["/workout/ai", "/workout"];
-  const hideLogo = hideLogoRoutes.includes(pathname);
-  const isWorkoutPage = pathname.startsWith("/workout");
+  const hideLogoRoutes = ["/workout/ai", "/workout", "/plan"];
+  const hideLogo = hideLogoRoutes.some((route) => pathname.startsWith(route));
+
+  const chipHiddenRoutes = ["/plan", "/workout"];
+  const hideWorkoutChip = chipHiddenRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
+
+  const footerHiddenRoutes = ["/plan"];
+  const hideFooter = footerHiddenRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
+
   return (
     <div
       className={
@@ -53,8 +63,8 @@ export default function Layout({ children }) {
         </div>
       )}
 
-      {!isWorkoutPage && <ActiveWorkoutChip />}
-      <Footer />
+      {!hideWorkoutChip && <ActiveWorkoutChip />}
+      {!hideFooter && <Footer />}
     </div>
   );
 }

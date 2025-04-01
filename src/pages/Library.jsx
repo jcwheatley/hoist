@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { query, where, collection, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { db } from "@/utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useWorkout } from "@/hooks/useWorkout";
@@ -11,7 +12,13 @@ export default function Library() {
 
   useEffect(() => {
     const fetchWorkouts = async () => {
-      const snapshot = await getDocs(collection(db, "workouts"));
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const userWorkouts = query(
+        collection(db, "workouts"),
+        where("userId", "==", user.uid)
+      );
+      const snapshot = await getDocs(userWorkouts);
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

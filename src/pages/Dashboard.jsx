@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { db } from "@/utils/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { query, where, collection, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { useWorkout } from "@/hooks/useWorkout";
+import { usePlan } from "@/context/PlanContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faWeightHanging,
@@ -14,12 +16,21 @@ import {
 export default function Dashboard() {
   const navigate = useNavigate();
   const { startWorkoutGuarded } = useWorkout();
+  const { plan, loading, todayWorkout, hasNextWorkout } = usePlan();
   const [workoutHistory, setWorkoutHistory] = useState([]);
 
   // Fetch workout history on mount
   useEffect(() => {
     const fetchWorkouts = async () => {
-      const snapshot = await getDocs(collection(db, "workouts"));
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const userWorkouts = query(
+        collection(db, "workouts"),
+        where("userId", "==", user.uid)
+      );
+      const snapshot = await getDocs(userWorkouts);
       const allWorkouts = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -58,9 +69,31 @@ export default function Dashboard() {
     return total + workoutVolume;
   }, 0);
 
-  const handleStartWorkout = () => {
-    startWorkoutGuarded(undefined, undefined, () => navigate("/workout"));
+  const handleStartManualWorkout = () => {
+    navigate("/workout"); // blank state
   };
+
+  const handleStartTodaysWorkout = () => {
+    if (todayWorkout) {
+      navigate("/workout", {
+        state: { templateWorkout: todayWorkout },
+      });
+    }
+  };
+
+  // const handleStartWorkout = () => {
+  //   startWorkoutGuarded(undefined, undefined, () => navigate("/workout"));
+  // };
+
+  // const handleStartTodaysWorkout = () => {
+  //   console.log("todayWorkout", todayWorkout);
+  //   if (todayWorkout) {
+  //     // const startWorkoutGuarded = (name, exercises, callback) => {
+  //     startWorkoutGuarded(todayWorkout.name, todayWorkout.exercises, () =>
+  //       navigate("/workout")
+  //     );
+  //   }
+  // };
 
   return (
     <div className='flex flex-col items-center'>
@@ -94,17 +127,39 @@ export default function Dashboard() {
       </div>
 
       {/* Start Today's Workout */}
-      <button
-        onClick={handleStartWorkout}
-        className='w-11/12 max-w-lg bg-orange-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-orange-600 transition-all'
-      >
-        START TODAY’S WORKOUT
-        <p className='text-sm font-normal'>UPPER BODY - STRENGTH - 30m</p>
-      </button>
+      {loading ? (
+        <p className='text-white mt-4'>Loading plan...</p>
+      ) : !plan ? (
+        <button
+          onClick={() => navigate("/plan")}
+          className='w-11/12 max-w-lg bg-orange-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-orange-600 transition-all'
+        >
+          SET UP WORKOUT PLAN
+          <p className='text-sm font-normal'>BUILD A PLAN THAT FITS YOU</p>
+        </button>
+      ) : hasNextWorkout && todayWorkout ? (
+        <button
+          onClick={handleStartTodaysWorkout}
+          className='w-11/12 max-w-lg bg-orange-500 text-white py-4 rounded-lg text-lg font-bold hover:bg-orange-600 transition-all'
+        >
+          START TODAY’S WORKOUT
+          <p className='text-sm font-normal'>
+            {todayWorkout.name ||
+              `${plan.goal?.toUpperCase()} - ${plan.weeklyFrequency} DAYS/WK`}
+          </p>
+        </button>
+      ) : (
+        <div className='w-11/12 max-w-lg text-center bg-[#19202D] text-white p-4 rounded-lg mt-4'>
+          <p className='text-lg font-bold'>You’re all caught up!</p>
+          <p className='text-sm text-gray-300 mt-1'>
+            No more workouts left in your plan.
+          </p>
+        </div>
+      )}
 
       {/* Manual Workout */}
       <button
-        onClick={handleStartWorkout}
+        onClick={handleStartManualWorkout}
         className='w-11/12 max-w-lg mt-4 bg-[#19202D] text-white py-4 px-6 rounded-lg text-lg font-semibold text-center hover:bg-[#212b3b] transition-all'
       >
         NEW WORKOUT

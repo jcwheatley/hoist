@@ -1,16 +1,27 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/utils/firebase";
 import { signOut } from "firebase/auth";
+import { useWorkout } from "@/hooks/useWorkout";
+import { usePlan } from "@/context/PlanContext";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const [user] = useAuthState(auth);
+  const { stopWorkout } = useWorkout();
+  const { clearPlan } = usePlan();
 
   const handleSignOut = async () => {
     try {
+      stopWorkout();
       await signOut(auth);
     } catch (error) {
       console.error("Error signing out:", error);
     }
+  };
+
+  const handleResetPlan = () => {
+    clearPlan();
+    toast.success("Workout plan has been reset.");
   };
 
   return (
@@ -37,16 +48,21 @@ export default function Profile() {
         </h2>
         <p className='text-gray-400 text-sm mt-1'>{user?.email}</p>
 
-        {/* Placeholder Sections */}
+        {/* Sections */}
         <div className='mt-8 space-y-4'>
           <div className='bg-[#1a1f29] p-4 rounded-lg shadow'>
             <h3 className='font-semibold text-lg'>Edit Profile</h3>
             <p className='text-gray-400 text-sm'>Coming soon...</p>
           </div>
 
-          <div className='bg-[#1a1f29] p-4 rounded-lg shadow'>
+          <div className='bg-[#1a1f29] p-4 rounded-lg shadow space-y-4'>
             <h3 className='font-semibold text-lg'>Settings</h3>
-            <p className='text-gray-400 text-sm'>Coming soon...</p>
+            <button
+              onClick={handleResetPlan}
+              className='w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold transition'
+            >
+              Reset Workout Plan
+            </button>
           </div>
 
           <button

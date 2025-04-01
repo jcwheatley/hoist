@@ -7,6 +7,21 @@ export default function ActiveWorkoutChip() {
 
   if (!activeWorkout) return null;
 
+  // const hasMeaningfulWorkoutData = (workout) => {
+  //   if (!workout) return false;
+  //   if (workout.name?.trim()) return true;
+
+  //   return workout.exercises?.some((exercise) => {
+  //     const hasName = exercise.name?.trim();
+  //     const hasSetData = exercise.sets?.some(
+  //       (set) => Number(set.value) > 0 || Number(set.weight) > 0
+  //     );
+  //     return hasName || hasSetData;
+  //   });
+  // };
+
+  // if (!hasMeaningfulWorkoutData(activeWorkout)) return null;
+
   const currentExercise =
     activeWorkout.exercises?.find((ex) => !ex.done) ??
     activeWorkout.exercises?.[0];

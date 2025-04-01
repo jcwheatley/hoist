@@ -9,10 +9,12 @@ import {
 import { faCircle as faRegCircle } from "@fortawesome/free-regular-svg-icons";
 import { db } from "@/utils/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import StopwatchBar from "@/components/StopwatchBar";
 import toast from "react-hot-toast";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useWorkout } from "@/hooks/useWorkout";
+import { usePlan } from "@/context/PlanContext";
 
 export default function Workout() {
   const { startWorkout, activeWorkout, updateWorkout, stopWorkout } =
@@ -20,6 +22,7 @@ export default function Workout() {
   const location = useLocation();
   const navigate = useNavigate();
   const headerRef = useRef(null);
+  const { markWorkoutComplete } = usePlan();
   const [headerHeight, setHeaderHeight] = useState(0);
   const [workoutName, setWorkoutName] = useState("");
   const [exercises, setExercises] = useState([
@@ -39,38 +42,30 @@ export default function Workout() {
     const templateWorkout = location.state?.templateWorkout;
 
     if (templateWorkout) {
-      // Use the passed-in workout as the starting point
       startWorkout(templateWorkout.name, templateWorkout.exercises);
-      setWorkoutName(templateWorkout.name.toUpperCase());
+      setWorkoutName(templateWorkout.name);
       setExercises(templateWorkout.exercises);
-    } else if (activeWorkout) {
-      const { name, exercises } = activeWorkout;
-      setWorkoutName(name.toUpperCase());
-      setExercises(exercises);
-
-      // ✅ Start workout in context
-      // startWorkout(name.toUpperCase(), preparedExercises);
     } else {
-      // Start default workout
+      const { name, exercises } = activeWorkout || {};
+
+      if (name && exercises?.length) {
+        setWorkoutName(name);
+        setExercises(exercises);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const hasValidExercises = exercises.some((ex) => ex.name.trim() !== "");
+    if (workoutName.trim() && hasValidExercises) {
       startWorkout(workoutName, exercises);
     }
-  }, [location.state]);
+    console.log("Workout updated:", workoutName, exercises);
+  }, [workoutName, exercises]);
 
   useEffect(() => {
     window.history.replaceState({}, document.title);
   }, []);
-
-  useEffect(() => {
-    const activeWorkout = {
-      name: workoutName,
-      exercises,
-    };
-    localStorage.setItem("activeWorkout", JSON.stringify(activeWorkout));
-  }, [workoutName, exercises]);
-
-  useEffect(() => {
-    updateWorkout({ name: workoutName, exercises });
-  }, [workoutName, exercises]);
 
   useEffect(() => {
     if (headerRef.current) {
@@ -170,6 +165,9 @@ export default function Workout() {
 
   // ✅ Save Workout to Firestore
   const completeWorkout = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
     if (!workoutName || exercises.length === 0) {
       toast.error("Workout must have a name and at least one exercise.");
       return;
@@ -177,11 +175,12 @@ export default function Workout() {
 
     try {
       await addDoc(collection(db, "workouts"), {
+        userId: user.uid,
         name: workoutName,
         exercises,
         createdAt: Timestamp.now(),
       });
-
+      await markWorkoutComplete();
       toast.success("Workout completed. Nice Work.");
       navigate("/library");
     } catch (error) {
@@ -331,7 +330,7 @@ export default function Workout() {
                           <div className='flex gap-2'>
                             <input
                               type='number'
-                              value={set.weight}
+                              value={set.weight ?? ""}
                               onChange={(e) =>
                                 updateSet(
                                   index,
@@ -345,7 +344,7 @@ export default function Workout() {
                             />
                             <input
                               type='number'
-                              value={set.value}
+                              value={set.value ?? ""}
                               onChange={(e) =>
                                 updateSet(
                                   index,
